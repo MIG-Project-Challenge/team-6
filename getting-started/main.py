@@ -39,24 +39,22 @@ print(trades)
 
 
 for stock in range(len(open_prices)): 
-    fast_sma = ta.SMA(open_prices[stock], timeperiod=5)
-    slow_sma = ta.SMA(open_prices[stock], timeperiod=40)
+    rsi = ta.RSI(open_prices[stock], timeperiod=14)
 
     for day in range(1, len(open_prices[0])-1):
         
-        # Buy: fast SMA crosses above slow SMA
-        if fast_sma[day] > slow_sma[day] and fast_sma[day-1] <= slow_sma[day-1]:
+        # Buy: RSI crosses above 30
+        if rsi[day] > 30 and rsi[day-1] <= 30:
             # we are trading the next day's open price
             trades[stock][day+1] = 1      
-        # Sell/short: fast SMA crosses below slow SMA
-        elif fast_sma[day] < slow_sma[day] and fast_sma[day-1] >= slow_sma[day-1]:
+        # Sell/short: RSI crosses above 70
+        elif rsi[day] > 70 and rsi[day-1] <= 70:
             # we are trading the next day's open price
             trades[stock][day+1] = -1
         # else do nothing
         else:
             trades[stock][day+1] = 0
 print(trades)
-
 portfolio_value, sharpe_ratio = eval_actions(trades, open_prices, cash=25000, verbose=True)
 print(f"\nPortfolio value: {portfolio_value}")
 print(f"Sharpe ratio: {sharpe_ratio}")
