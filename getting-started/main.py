@@ -38,7 +38,7 @@ print(trades)
 # "debt" in our case is really just the negative value of our short positions
 fast_period = 14
 slow_period = 29
-signal_period = 10
+signal_period = 9
 for stock in range(len(open_prices)):
     # Calculate MACD
     macd, signal, _ = ta.MACD(open_prices[stock], fastperiod=fast_period, slowperiod=slow_period, signalperiod=signal_period)
