@@ -39,6 +39,8 @@ print(trades)
 fast_period = 14
 slow_period = 29
 signal_period = 9
+stop_loss_percentage = 0.02  # 2% stop loss
+
 for stock in range(len(open_prices)):
     # Calculate MACD
     macd, signal, _ = ta.MACD(open_prices[stock], fastperiod=fast_period, slowperiod=slow_period, signalperiod=signal_period)
@@ -46,8 +48,7 @@ for stock in range(len(open_prices)):
     # Initialize buy and sell signals for the current stock
     buy_signal = [False] * len(macd)
     sell_signal = [False] * len(macd)
-    fast_sma = ta.SMA(open_prices[stock], timeperiod=5)
-    slow_sma = ta.SMA(open_prices[stock], timeperiod=40)
+
     # Determine buy and sell signals
     for i in range(1, len(macd)):
         if macd[i] > signal[i] and macd[i - 1] <= signal[i - 1]:
@@ -58,9 +59,10 @@ for stock in range(len(open_prices)):
     # Apply buy and sell signals to the trades list
     for day in range(1, len(open_prices[stock])-1):
         if buy_signal[day]:
-            trades[stock][day+1] = 1  # Buy signal
+            trades[stock][day+1] = 25  # Buy signal
+            # trades[stock][day+1] = 1  # Buy signal
         elif sell_signal[day]:
-            trades[stock][day+1] = -1  # Sell signal
+            trades[stock][day+1] = -25  # Sell signal
         else:
             trades[stock][day+1] = 0 # No signal
 # for stock in range(len(open_prices)): 
